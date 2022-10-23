@@ -1,0 +1,59 @@
+id;Date_Time;Year;Month;Mdate;Day;Time;Sensor_ID;Sensor_Name;Hourly_Counts
+2249087;May 29, 2018 03:00:00 PM;2018;May;29;Tuesday;15;51;QVM-Franklin St (North);172
+2535774;January 22, 2019 05:00:00 PM;2019;January;22;Tuesday;17;53;Collins St (North);1550
+2554008;February 07, 2019 10:00:00 AM;2019;February;7;Thursday;10;40;Lonsdale St-Spring St (West);533
+1520509;June 07, 2016 06:00:00 PM;2016;June;7;Tuesday;18;19;Chinatown-Swanston St (North);1056
+2874420;October 22, 2019 01:00:00 PM;2019;October;22;Tuesday;13;14;Sandridge Bridge;779
+2762075;July 26, 2019 11:00:00 AM;2019;July;26;Friday;11;28;The Arts Centre;1373
+3883467;September 14, 2021 07:00:00 PM;2021;September;14;Tuesday;19;29;St Kilda Rd-Alexandra Gardens;97
+1759676;February 12, 2017 01:00:00 AM;2017;February;12;Sunday;1;12;New Quay;42
+960766;October 10, 2014 09:00:00 PM;2014;October;10;Friday;21;13;Flagstaff Station;215
+2929471;December 03, 2019 10:00:00 PM;2019;December;3;Tuesday;22;53;Collins St (North);221
+1041331;January 23, 2015 12:00:00 AM;2015;January;23;Friday;0;8;Webb Bridge;23
+4412748;July 27, 2022 06:00:00 AM;2022;July;27;Wednesday;6;71;Westwood Place;3
+544584;November 23, 2012 02:00:00 PM;2012;November;23;Friday;14;11;Waterfront City;220
+1974117;September 27, 2017 11:00:00 AM;2017;September;27;Wednesday;11;10;Victoria Point;255
+1357567;December 28, 2015 12:00:00 PM;2015;December;28;Monday;12;19;Chinatown-Swanston St (North);1401
+1622416;September 18, 2016 11:00:00 AM;2016;September;18;Sunday;11;23;Spencer St-Collins St (South);189
+3485207;January 02, 2021 09:00:00 AM;2021;January;2;Saturday;9;64;Royal Pde-Grattan St;29
+2420694;October 18, 2018 11:00:00 PM;2018;October;18;Thursday;23;11;Waterfront City;40
+1680216;November 18, 2016 12:00:00 AM;2016;November;18;Friday;0;32;City Square;651
+1215262;August 01, 2015 10:00:00 AM;2015;August;1;Saturday;10;8;Webb Bridge;100
+3610387;March 24, 2021 12:00:00 AM;2021;March;24;Wednesday;0;45;Little Collins St-Swanston St (East);64
+4323197;May 08, 2022 12:00:00 AM;2022;May;8;Sunday;0;79;Flinders St (South);334
+4385611;July 03, 2022 01:00:00 PM;2022;July;3;Sunday;13;21;Bourke St-Russell St (West);1110
+4434979;August 01, 2022 01:00:00 PM;2022;August;1;Monday;13;5;Princes Bridge;1273
+1469421;April 18, 2016 02:00:00 PM;2016;April;18;Monday;14;36;Queen St (West);675
+3656185;April 21, 2021 06:00:00 PM;2021;April;21;Wednesday;18;6;Flinders Street Station Underpass;1561
+3297443;August 28, 2020 12:00:00 AM;2020;August;28;Friday;0;56;Lonsdale St - Elizabeth St (North);4
+1701505;December 10, 2016 05:00:00 PM;2016;December;10;Saturday;17;24;Spencer St-Collins St (North);1939
+66402;October 11, 2009 11:00:00 PM;2009;October;11;Sunday;23;12;New Quay;8
+2495626;December 20, 2018 12:00:00 AM;2018;December;20;Thursday;0;12;New Quay;48
+2971847;January 04, 2020 05:00:00 PM;2020;January;4;Saturday;17;22;Flinders St-Elizabeth St (East);3067
+3244607;July 20, 2020 01:00:00 AM;2020;July;20;Monday;1;30;Lonsdale St (South);7
+264;May 01, 2009 05:00:00 PM;2009;May;1;Friday;17;12;New Quay;524
+3912218;October 01, 2021 05:00:00 PM;2021;October;1;Friday;17;64;Royal Pde-Grattan St;129
+1240563;August 28, 2015 10:00:00 AM;2015;August;28;Friday;10;5;Princes Bridge;1355
+2714850;June 19, 2019 04:00:00 AM;2019;June;19;Wednesday;4;42;Grattan St-Swanston St (West);3
+2532488;January 19, 2019 10:00:00 PM;2019;January;19;Saturday;22;51;QVM-Franklin St (North);99
+3860308;August 31, 2021 11:00:00 PM;2021;August;31;Tuesday;23;51;QVM-Franklin St (North);15
+3854983;August 28, 2021 07:00:00 PM;2021;August;28;Saturday;19;46;Pelham St (S);8
+4370382;June 14, 2022 11:00:00 PM;2022;June;14;Tuesday;23;79;Flinders St (South);96
+1548101;July 05, 2016 03:00:00 AM;2016;July;5;Tuesday;3;13;Flagstaff Station;11
+2170698;March 22, 2018 04:00:00 AM;2018;March;22;Thursday;4;46;Pelham St (South);2
+3192025;June 12, 2020 04:00:00 AM;2020;June;12;Friday;4;19;Chinatown-Swanston St (North);4
+2862709;October 13, 2019 12:00:00 PM;2019;October;13;Sunday;12;19;Chinatown-Swanston St (North);974
+4119078;January 16, 2022 05:00:00 AM;2022;January;16;Sunday;5;55;Elizabeth St-La Trobe St (East);71
+2299849;July 12, 2018 06:00:00 AM;2018;July;12;Thursday;6;12;New Quay;52
+2693298;June 02, 2019 01:00:00 AM;2019;June;2;Sunday;1;52;Elizabeth St-Lonsdale St (South);244
+1594600;August 21, 2016 02:00:00 AM;2016;August;21;Sunday;2;26;QV Market-Elizabeth St (West);165
+3014725;February 05, 2020 09:00:00 AM;2020;February;5;Wednesday;9;49;QVM-Therry St (South);108
+941809;September 16, 2014 03:00:00 PM;2014;September;16;Tuesday;15;29;St Kilda Rd-Alexandra Gardens;256
+2469007;November 28, 2018 04:00:00 AM;2018;November;28;Wednesday;4;27;QV Market-Peel St;3
+1256161;September 13, 2015 04:00:00 PM;2015;September;13;Sunday;16;3;Melbourne Central;2430
+2933741;December 07, 2019 04:00:00 AM;2019;December;7;Saturday;4;35;Southbank;28
+4451963;August 27, 2022 05:00:00 AM;2022;August;27;Saturday;5;51;QVM-Franklin St (North);13
+1989729;October 12, 2017 01:00:00 AM;2017;October;12;Thursday;1;42;Grattan St-Swanston St (West);38
+1210337;July 27, 2015 03:00:00 AM;2015;July;27;Monday;3;39;Alfred Place;0
+1590543;August 16, 2016 06:00:00 PM;2016;August;16;Tuesday;18;25;Melbourne Convention Exhibition Centre;932
+1569155;July 26, 2016 02:00:00 AM;2016;July;26;Tuesday;2;10;Victoria Point;0
