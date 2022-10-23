@@ -67,22 +67,19 @@ public class Query5 extends Query{
         inter.putAll(result);
         this.logger.info("Inter map has "+this.hazelcastInstance.getMap("Inter").size()+" elements\n");
 
-        JobTracker readingsJobTracker2 = this.hazelcastInstance.getJobTracker("query5JobTracker2");
+        for (Map.Entry<String, Integer> stringIntegerEntry : inter.entrySet()) {
+            System.out.println(stringIntegerEntry.getKey()+" "+stringIntegerEntry.getValue()+"\n");
+        }
 
         KeyValueSource<String, Integer> interSource = KeyValueSource.fromMap(inter);
-        Job<String, Integer> job2 = readingsJobTracker2.newJob( interSource);
+        Job<String, Integer> job2 = readingsJobTracker.newJob( interSource);
 
         this.logger.info("Second Map-reduce  starting...");
 
-//        ICompletableFuture<Collection<Pair<Integer, Pair<String, String> >>> futureFinal = job2
-//                .mapper(new Query5MapperSecond())
-//                .reducer( new Query5ReducerSecond() )
-//                .submit(new Query5MapperThirdCollator());
-        ICompletableFuture<Map<Integer, List<String>>> futureFinal = job2
+        ICompletableFuture<Collection<Pair<Integer, Pair<String, String> >>> futureFinal = job2
                 .mapper(new Query5MapperSecond())
                 .reducer( new Query5ReducerSecond() )
-                .submit();
-
+                .submit(new Query5MapperThirdCollator());
 
 
         this.logger.info("Second Map-reduce finished...\n");
@@ -94,20 +91,20 @@ public class Query5 extends Query{
             FileWriter writer = new FileWriter(file);
             writer.write(HEADER);
 
-//            Collection<Pair<Integer, Pair<String, String> >> finalResult = futureFinal.get();
-            Map<Integer, List<String >> finalResult = futureFinal.get();
+            Collection<Pair<Integer, Pair<String, String> >> finalResult = futureFinal.get();
+//            Map<Integer, List<String >> finalResult = futureFinal.get();
 
 
             this.logger.info("After collator "+finalResult.size()+" elements\n");
             this.logger.info("Starting to generate " +queryOutputFile+" file \n");
-//            for(Pair<Integer, Pair<String, String>> entry : finalResult){
-//                writer.write(entry.getKey()+";"+entry.getValue().getKey()+";"
-//                        + entry.getValue().getValue() +"\n");
-//            }
-            for(Map.Entry<Integer,List<String>> entry : finalResult.entrySet()){
-                writer.write(entry.getKey()+";"+entry.getValue().get(0)+";"
-                         +"\n");
+            for(Pair<Integer, Pair<String, String>> entry : finalResult){
+                writer.write(entry.getKey()+";"+entry.getValue().getKey()+";"
+                        + entry.getValue().getValue() +"\n");
             }
+//            for(Map.Entry<Integer,List<String>> entry : finalResult.entrySet()){
+//                writer.write(entry.getKey()+";"+entry.getValue().get(0)+";"
+//                         +"\n");
+//            }
             this.logger.info("Ending of file "+queryOutputFile+" generator\n");
             writer.close();
         } catch (IOException e) {
