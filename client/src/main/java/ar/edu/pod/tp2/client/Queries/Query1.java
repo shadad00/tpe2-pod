@@ -8,7 +8,10 @@ import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -23,22 +26,7 @@ public class Query1  extends Query {
     }
 
     public void run(){
-        try{
-            readArguments();
-        }catch (IllegalArgumentException e ){
-            this.logger.error("Invalid argument");
-        }
-            configHazelcast();
-        try {
-            loadData(readingsListName,sensorMapName);
-        }catch (IOException e){
-            this.logger.error("Unable to open csv files");
-        }
-
-        IList<SensorReading> readingIList = this.hazelcastInstance.getList(readingsListName);
-        IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorMapName);
-        this.logger.info("ReadingList has "+readingIList.size() +" elements\n");
-        this.logger.info("SensorMap "+sensorIMap.size() +" elements\n");
+        super.run(readingsListName,sensorMapName);
 
         JobTracker readingsJobTracker = this.hazelcastInstance.getJobTracker("query1JobTracker");
         KeyValueSource<String, SensorReading> readingsSource = KeyValueSource.fromList(readingIList);
@@ -47,18 +35,24 @@ public class Query1  extends Query {
         Job<String, SensorReading> job = readingsJobTracker.newJob( readingsSource);
 
         this.logger.info("Map-reduce starting...");
-        Query1Mapper query1Mapper = new Query1Mapper();
-//        query1Mapper.setHazelcastInstance(this.hazelcastInstance);
         ICompletableFuture<Map<String, Long>> future = job
-                .mapper(query1Mapper  )
+                .mapper(new Query1Mapper())
                 .reducer( new Query1Reducer() ).submit();
 
         // Wait and retrieve the result
         try {
-            Map<String, Long> result = future.get();
+            File file = new File(this.outPath+"/query1.csv");
+            try {
+                FileWriter writer = new FileWriter(file);
+                Map<String, Long> result = future.get();
+                result.entrySet().forEach(
+                        (entry)->writer.write(entry.getKey()+";"+entry.getValue()));
+
+            } catch (IOException e) {
+                this.logger.error("Unable to Open file: "+this.outPath+"/query1.csv"+" \n");
+            }
             this.logger.info("Map-reduce finished...");
             for(Map.Entry<String,Long> e : result.entrySet()) {
-//                System.out.println("debugeando");
                 System.out.println(e.getKey() + " " + e.getValue());
             }
 
@@ -69,7 +63,6 @@ public class Query1  extends Query {
             this.logger.error("Execution error");
             throw new RuntimeException(e);
         }
-
 
     }
 }

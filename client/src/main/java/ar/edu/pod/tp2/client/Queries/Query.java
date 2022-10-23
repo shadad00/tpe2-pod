@@ -26,6 +26,8 @@ public abstract class Query {
     protected HazelcastInstance hazelcastInstance;
     protected final List<String> addresses=new ArrayList<>();
     protected Logger logger = LoggerFactory.getLogger(Query.class);
+    protected IList<SensorReading> readingIList;
+    protected IMap<Integer, Sensor> sensorIMap;
 
     public void readArguments(){
         // Parse addresses
@@ -61,6 +63,22 @@ public abstract class Query {
         sensorIMap.clear();
         SensorsParser sensorsParser = new SensorsParser(inPath, sensorIMap);
         sensorsParser.parse();
+    }
+
+    protected void run(String readingsListName,String sensorMapName ){
+        try{
+            readArguments();
+        }catch (IllegalArgumentException e ){
+            this.logger.error("Invalid argument");
+        }
+        configHazelcast();
+        try {
+            loadData(readingsListName,sensorMapName);
+        }catch (IOException e){
+            this.logger.error("Unable to open csv files");
+        }
+        this.readingIList = this.hazelcastInstance.getList(readingsListName);
+        this.sensorIMap = this.hazelcastInstance.getMap(sensorMapName);
     }
 
 

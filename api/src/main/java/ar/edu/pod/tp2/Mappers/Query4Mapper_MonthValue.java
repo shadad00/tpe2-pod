@@ -11,16 +11,16 @@ import com.hazelcast.mapreduce.Mapper;
 import java.time.LocalDateTime;
 import java.time.Month;
 
-public class Query4Mapper implements Mapper< String, SensorReading, String, Pair<Integer, Month>> {
+public class Query4Mapper_MonthValue implements Mapper< String, SensorReading, Pair<String, LocalDateTime>, Integer> {
     private final Integer year;
-    public Query4Mapper(Integer year) {
+    public Query4Mapper_MonthValue(Integer year) {
         this.year = year;
     }
 
     @Override
-    public void map(String s, SensorReading sensorReading, Context<String, Pair<Integer, Month>> context) {
+    public void map(String s, SensorReading sensorReading, Context<Pair<String, LocalDateTime>, Integer> context) {
         if (sensorReading.getSensorStatus().equals(SensorStatus.A) && sensorReading.getYear() == year){
-            context.emit(sensorReading.getSensorDescription(), new Pair<>(sensorReading.getHourlyCounts(), sensorReading.getReadingDate().getMonth()));
+            context.emit(new Pair<>(sensorReading.getSensorDescription(), sensorReading.getReadingDate()), sensorReading.getHourlyCounts());
         }
     }
 }

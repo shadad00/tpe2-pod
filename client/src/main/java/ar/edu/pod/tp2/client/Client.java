@@ -13,8 +13,6 @@ public class Client {
     private static Logger logger = LoggerFactory.getLogger(Client.class);
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        Query1 q = new Query1();
-        q.run();
 
     }
 }
