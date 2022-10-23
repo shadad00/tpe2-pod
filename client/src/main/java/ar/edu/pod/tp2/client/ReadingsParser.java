@@ -57,7 +57,6 @@ public class ReadingsParser extends CsvParser {
         sensorId =  Integer.parseInt(line[SENSOR_ID]);
         hourlyCounts = Integer.parseInt(line[HOURLY_COUNTS]);
         Sensor sensor = sensorIMap.get(sensorId);
-        this.logger.info(sensor.getSensorId()+" "+sensor.getSensorDescription()+" "+sensor.getStatus()+" \n");
         SensorReading sensorReading = new SensorReading(readingDate, sensorId, sensor.getSensorDescription(),sensor.getStatus()
                 , hourlyCounts, day);
         sensorReadingsList.add(sensorReading);

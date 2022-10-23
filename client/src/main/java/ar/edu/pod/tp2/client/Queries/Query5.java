@@ -1,11 +1,9 @@
 package ar.edu.pod.tp2.client.Queries;
 
-import ar.edu.pod.tp2.Mappers.Query2Mapper;
 import ar.edu.pod.tp2.Mappers.Query5MapperFirst;
 import ar.edu.pod.tp2.Mappers.Query5MapperSecond;
-import ar.edu.pod.tp2.Mappers.Query5MapperThirdCollator;
+import ar.edu.pod.tp2.Collators.Query5MapperThirdCollator;
 import ar.edu.pod.tp2.Pair;
-import ar.edu.pod.tp2.Reducer.Query2Reducer;
 import ar.edu.pod.tp2.Reducer.Query5ReducerFirst;
 import ar.edu.pod.tp2.Reducer.Query5ReducerSecond;
 import ar.edu.pod.tp2.SensorReading;
@@ -19,7 +17,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -92,8 +89,6 @@ public class Query5 extends Query{
             writer.write(HEADER);
 
             Collection<Pair<Integer, Pair<String, String> >> finalResult = futureFinal.get();
-//            Map<Integer, List<String >> finalResult = futureFinal.get();
-
 
             this.logger.info("After collator "+finalResult.size()+" elements\n");
             this.logger.info("Starting to generate " +queryOutputFile+" file \n");
@@ -101,10 +96,6 @@ public class Query5 extends Query{
                 writer.write(entry.getKey()+";"+entry.getValue().getKey()+";"
                         + entry.getValue().getValue() +"\n");
             }
-//            for(Map.Entry<Integer,List<String>> entry : finalResult.entrySet()){
-//                writer.write(entry.getKey()+";"+entry.getValue().get(0)+";"
-//                         +"\n");
-//            }
             this.logger.info("Ending of file "+queryOutputFile+" generator\n");
             writer.close();
         } catch (IOException e) {

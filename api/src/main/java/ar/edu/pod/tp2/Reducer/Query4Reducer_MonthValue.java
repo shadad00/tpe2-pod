@@ -4,11 +4,10 @@ import ar.edu.pod.tp2.Pair;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 
-public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Month>, Integer, Long> {
+public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Month>, Long, Double> {
 
     private boolean isLeap;
 
@@ -17,11 +16,11 @@ public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Mon
     }
 
     @Override
-    public Reducer<Integer, Long> newReducer(Pair<String, Month> stringMonthPair) {
+    public Reducer<Long, Double> newReducer(Pair<String, Month> stringMonthPair) {
         return new MyReducer(isLeap, stringMonthPair.getValue());
     }
 
-    private static class MyReducer extends Reducer<Integer, Long> {
+    private static class MyReducer extends Reducer<Long, Double> {
         private int sum = 0;
         private final boolean isLeap;
         private final Month month;
@@ -32,13 +31,13 @@ public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Mon
         }
 
         @Override
-        public void reduce(Integer integer) {
+        public void reduce(Long integer) {
             sum += integer;
         }
 
         @Override
-        public Long finalizeReduce() {
-            return (long)sum/ month.length(isLeap);
+        public Double finalizeReduce() {
+            return (Double.valueOf(sum)/ month.length(isLeap));
         }
     }
 

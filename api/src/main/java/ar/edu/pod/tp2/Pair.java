@@ -1,6 +1,7 @@
 package ar.edu.pod.tp2;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class Pair<K,V> implements Serializable {
     private final K key;

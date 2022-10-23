@@ -1,5 +1,7 @@
 package ar.edu.pod.tp2.client.Queries;
 
+import ar.edu.pod.tp2.Collators.Query3Collator;
+import ar.edu.pod.tp2.Collators.Query4Collator;
 import ar.edu.pod.tp2.Mappers.Query2Mapper;
 import ar.edu.pod.tp2.Mappers.Query3Mapper;
 import ar.edu.pod.tp2.Pair;
@@ -9,6 +11,7 @@ import ar.edu.pod.tp2.SensorReading;
 import ar.edu.pod.tp2.client.Queries.Query;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.mapreduce.Job;
+import com.hazelcast.mapreduce.JobCompletableFuture;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
@@ -16,6 +19,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -45,9 +49,10 @@ public class Query3 extends Query {
         Job<String, SensorReading> job = readingsJobTracker.newJob( readingsSource);
 
         this.logger.info("Map-reduce starting...");
-        ICompletableFuture< Map<String, Pair<Integer, LocalDateTime >>> future = job
+        JobCompletableFuture<Collection<Pair<String, Pair<Integer, LocalDateTime>>>> future = job
                 .mapper(new Query3Mapper(this.minPedestrianNumber))
-                .reducer( new Query3Reducer() ).submit();
+                .reducer( new Query3Reducer() )
+                .submit( new Query3Collator());
 
 
         // Wait and retrieve the result
@@ -55,10 +60,10 @@ public class Query3 extends Query {
             File file = new File(this.outPath+"/"+queryOutputFile);
             FileWriter writer = new FileWriter(file);
             writer.write(HEADER);
-            Map<String, Pair<Integer, LocalDateTime >> result = future.get();
+            Collection<Pair<String, Pair<Integer, LocalDateTime>>> result = future.get();
             this.logger.info("Map-reduce finished...\n");
             this.logger.info("Generating file "+queryOutputFile+"\n");
-            for(Map.Entry<String, Pair<Integer, LocalDateTime >> entry : result.entrySet())
+            for(Pair<String, Pair<Integer, LocalDateTime>> entry : result)
                 writer.write(entry.getKey()+";"+entry.getValue().getKey()+";"
                         + entry.getValue().getValue()+"\n");
             this.logger.info("Ending of file "+queryOutputFile+" generator \n");

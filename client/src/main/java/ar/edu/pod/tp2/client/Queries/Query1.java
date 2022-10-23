@@ -1,10 +1,12 @@
 package ar.edu.pod.tp2.client.Queries;
 
 import ar.edu.pod.tp2.*;
+import ar.edu.pod.tp2.Collators.Query1Collator;
 import ar.edu.pod.tp2.Mappers.Query1Mapper;
 import ar.edu.pod.tp2.Reducer.Query1Reducer;
 import com.hazelcast.core.*;
 import com.hazelcast.mapreduce.Job;
+import com.hazelcast.mapreduce.JobCompletableFuture;
 import com.hazelcast.mapreduce.JobTracker;
 import com.hazelcast.mapreduce.KeyValueSource;
 
@@ -12,6 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -42,10 +45,10 @@ public class Query1  extends Query {
         Job<String, SensorReading> job = readingsJobTracker.newJob(readingsSource);
 
         this.logger.info("Map-reduce starting...");
-        ICompletableFuture<Map<String, Long>> future = job
+        JobCompletableFuture<Collection<Pair<String, Long>>> future = job
                 .mapper(new Query1Mapper())
                 .reducer(new Query1Reducer())
-                .submit();
+                .submit(new Query1Collator());
 
         // Wait and retrieve the result
         try {
@@ -54,11 +57,12 @@ public class Query1  extends Query {
                file.createNewFile();
             FileWriter writer = new FileWriter(file);
             writer.write(this.HEADER);
-            Map<String, Long> result = future.get();
+            Collection<Pair<String, Long>> result = future.get();
             this.logger.info(result.toString() + "\n");
             this.logger.info("Map-reduce finished...\n");
             this.logger.info("Generating file "+queryOutputFile+"\n");
-            for(Map.Entry<String,Long> entry : result.entrySet())
+
+            for(Pair<String, Long> entry : result)
                 writer.write(entry.getKey()+";"+entry.getValue()+"\n");
             this.logger.info("End of file "+queryOutputFile+" generation \n");
             writer.close();
