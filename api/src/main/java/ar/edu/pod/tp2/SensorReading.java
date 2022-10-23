@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public class SensorReading implements Serializable {
     private LocalDateTime readingDate;
 
+
     private int sensorId;
     private int hourlyCounts;
 

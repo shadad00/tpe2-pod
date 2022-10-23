@@ -1,15 +1,19 @@
 package ar.edu.pod.tp2.client;
 
 
-import ar.edu.pod.tp2.SensorReading;
 
-import java.time.LocalDate;
+import ar.edu.pod.tp2.Pair;
+import ar.edu.pod.tp2.SensorReading;
+import com.hazelcast.core.IMap;
+
 import java.time.LocalDateTime;
 
 public class ReadingsParser extends CsvParser {
 
-    public ReadingsParser(String path) {
+    private final IMap<Pair<Integer, LocalDateTime>,SensorReading> readingMap;
+    public ReadingsParser(String path, IMap<Pair<Integer, LocalDateTime>, SensorReading> map) {
         super(path);
+        this.readingMap = map;
     }
 
     private static final int YEAR = 2;
@@ -48,6 +52,7 @@ public class ReadingsParser extends CsvParser {
         sensorId =  Integer.parseInt(line[SENSOR_ID]);
         hourlyCounts = Integer.parseInt(line[HOURLY_COUNTS]);
         SensorReading sensorReading = new SensorReading(readingDate, sensorId, hourlyCounts);
+        readingMap.put(new Pair<>(sensorId, readingDate), sensorReading);
     }
 }
 

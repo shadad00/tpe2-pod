@@ -1,5 +1,6 @@
 package ar.edu.pod.tp2.client;
 
+import com.hazelcast.core.IMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

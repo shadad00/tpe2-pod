@@ -3,11 +3,17 @@ package ar.edu.pod.tp2.client;
 
 import ar.edu.pod.tp2.Sensor;
 import ar.edu.pod.tp2.SensorStatus;
+import com.hazelcast.core.IMap;
+
+import java.util.HashMap;
 
 public  class SensorsParser  extends CsvParser {
 
-    public SensorsParser(String path) {
+    private final IMap<Integer, Sensor> sensorIMap;
+
+    public SensorsParser(String path,IMap<Integer, Sensor> sensorIMap) {
         super(path);
+        this.sensorIMap = sensorIMap;
     }
 
     private static final int SENSOR_ID = 0;
@@ -31,7 +37,8 @@ public  class SensorsParser  extends CsvParser {
      */
     @Override
     void loadData(String[] line) {
-        Sensor sensor = new Sensor(Integer.parseInt(line[SENSOR_ID]), line[SENSOR_DESC], SensorStatus.valueOf(line[STATUS]));
-
+        int sensorId= Integer.parseInt(line[SENSOR_ID]);
+        Sensor sensor = new Sensor(sensorId, line[SENSOR_DESC], SensorStatus.valueOf(line[STATUS]));
+        this.sensorIMap.put(sensorId,sensor);
     }
 }
