@@ -24,7 +24,7 @@ public class Server {
 
         InterfacesConfig interfacesConfig = new InterfacesConfig()
                 .setEnabled(true)
-                .setInterfaces(Collections.singletonList("192.168.0.*"));
+                .setInterfaces(Collections.singletonList("127.0.0.*"));
 
         NetworkConfig networkConfig = new NetworkConfig().setInterfaces(interfacesConfig)
                 .setJoin(joinConfig);

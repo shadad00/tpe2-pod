@@ -12,18 +12,15 @@ import java.time.LocalDateTime;
 import java.time.Month;
 
 public class Query4Mapper implements Mapper< String, SensorReading, String, Pair<Integer, Month>> {
-    private final IMap<Integer, Sensor> sensorsDescription;
     private final Integer year;
-    public Query4Mapper(IMap<Integer, Sensor> sensorsDescription, Integer year) {
-        this.sensorsDescription= sensorsDescription;
+    public Query4Mapper(Integer year) {
         this.year = year;
     }
 
     @Override
     public void map(String s, SensorReading sensorReading, Context<String, Pair<Integer, Month>> context) {
-        Sensor currentSensor = sensorsDescription.get(sensorReading.getSensorId());
-        if (currentSensor.getStatus().equals(SensorStatus.A) && sensorReading.getYear() == year){
-            context.emit(sensorsDescription.get(sensorReading.getSensorId()).getSensorDescription(), new Pair<>(sensorReading.getHourlyCounts(), sensorReading.getReadingDate().getMonth()));
+        if (sensorReading.getSensorStatus().equals(SensorStatus.A) && sensorReading.getYear() == year){
+            context.emit(sensorReading.getSensorDescription(), new Pair<>(sensorReading.getHourlyCounts(), sensorReading.getReadingDate().getMonth()));
         }
     }
 }
