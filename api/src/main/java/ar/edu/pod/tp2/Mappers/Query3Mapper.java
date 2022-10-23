@@ -7,16 +7,16 @@ import com.hazelcast.mapreduce.Mapper;
 
 import java.time.LocalDateTime;
 
-public class Query3Mapper implements Mapper< String, SensorReading, Integer, Pair<Integer, LocalDateTime>> {
+public class Query3Mapper implements Mapper< String, SensorReading, String, Pair<Integer, LocalDateTime>> {
     private final Integer min;
     public Query3Mapper(Integer min) {
         this.min = min;
     }
 
     @Override
-    public void map(String s, SensorReading sensorReading, Context<Integer, Pair<Integer, LocalDateTime>> context) {
+    public void map(String s, SensorReading sensorReading, Context<String, Pair<Integer, LocalDateTime>> context) {
         if (sensorReading.getSensorStatus().equals(SensorStatus.A) && sensorReading.getHourlyCounts() >= min){
-            context.emit(sensorReading.getSensorId(), new Pair<>(sensorReading.getHourlyCounts(), sensorReading.getReadingDate()));
+            context.emit(sensorReading.getSensorDescription(), new Pair<>(sensorReading.getHourlyCounts(), sensorReading.getReadingDate()));
         }
     }
 }

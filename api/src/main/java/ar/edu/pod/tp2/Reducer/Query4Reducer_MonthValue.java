@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
 
-public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, LocalDateTime>, Integer, Long> {
+public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Month>, Integer, Long> {
 
     private boolean isLeap;
 
@@ -17,16 +17,18 @@ public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Loc
     }
 
     @Override
-    public Reducer<Integer, Long> newReducer(Pair<String, LocalDateTime> stringMonthPair) {
-        return new MyReducer(isLeap);
+    public Reducer<Integer, Long> newReducer(Pair<String, Month> stringMonthPair) {
+        return new MyReducer(isLeap, stringMonthPair.getValue());
     }
 
     private static class MyReducer extends Reducer<Integer, Long> {
         private int sum = 0;
         private final boolean isLeap;
+        private final Month month;
 
-        public MyReducer(boolean isLeap) {
+        public MyReducer(boolean isLeap, Month month) {
             this.isLeap = isLeap;
+            this.month = month;
         }
 
         @Override
@@ -36,7 +38,7 @@ public class Query4Reducer_MonthValue implements ReducerFactory<Pair<String, Loc
 
         @Override
         public Long finalizeReduce() {
-            return (long)sum;
+            return (long)sum/ month.length(isLeap);
         }
     }
 

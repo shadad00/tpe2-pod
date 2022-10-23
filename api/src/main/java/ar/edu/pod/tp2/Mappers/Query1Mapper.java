@@ -19,8 +19,7 @@ public class Query1Mapper implements Mapper< String, SensorReading, String, Inte
     @Override
     public void map(String s, SensorReading sensorReading, Context<String, Integer> context) {
         if (sensorReading.getSensorStatus().equals(SensorStatus.A)){
-            System.out.println(s+ " " + sensorReading.getSensorId() + " " + sensorReading.getHourlyCounts());
-            context.emit(String.valueOf(sensorReading.getSensorId()), sensorReading.getHourlyCounts());
+            context.emit(sensorReading.getSensorDescription(), sensorReading.getHourlyCounts());
         }
     }
 }

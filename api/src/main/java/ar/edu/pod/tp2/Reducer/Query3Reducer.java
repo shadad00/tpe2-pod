@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Query3Reducer implements ReducerFactory<Integer, Pair<Integer, LocalDateTime>, Pair<Integer, LocalDateTime>> {
+public class Query3Reducer implements ReducerFactory<String, Pair<Integer, LocalDateTime>, Pair<Integer, LocalDateTime>> {
     @Override
-    public Reducer<Pair<Integer, LocalDateTime>, Pair<Integer, LocalDateTime>> newReducer(Integer integer) {
+    public Reducer<Pair<Integer, LocalDateTime>, Pair<Integer, LocalDateTime>> newReducer(String integer) {
         return new MyReducer();
     }
 

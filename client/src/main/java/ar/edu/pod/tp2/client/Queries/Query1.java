@@ -14,55 +14,60 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class Query1  extends Query {
-    private String readingsListName = "readingQuery1";
-    private String sensorMapName = "sensorQuery1";
 
     public static void main(String[] args) {
-        Query1 query1 = new Query1();
+        Query1 query1 = new Query1("readingQuery1","sensorQuery1","query1.csv","Sensor;Total_Count\n");
         query1.run();
+    }
+
+    public Query1(String readingsListName,String sensorMapName,String queryOutputFile,String header) {
+        this.readingsListName=readingsListName;
+        this.sensorMapName=sensorMapName;
+        this.queryOutputFile = queryOutputFile;
+        this.HEADER = header;
     }
 
     public void run(){
         super.run(readingsListName,sensorMapName);
+        this.logger.info(readingIList.size()+" readings added to cluster \n");
+        this.logger.info(sensorIMap.size()+" sensors added to cluster \n");
 
         JobTracker readingsJobTracker = this.hazelcastInstance.getJobTracker("query1JobTracker");
         KeyValueSource<String, SensorReading> readingsSource = KeyValueSource.fromList(readingIList);
-        
-        
-        Job<String, SensorReading> job = readingsJobTracker.newJob( readingsSource);
+
+        Job<String, SensorReading> job = readingsJobTracker.newJob(readingsSource);
 
         this.logger.info("Map-reduce starting...");
         ICompletableFuture<Map<String, Long>> future = job
                 .mapper(new Query1Mapper())
-                .reducer( new Query1Reducer() ).submit();
+                .reducer(new Query1Reducer())
+                .submit();
 
         // Wait and retrieve the result
         try {
-            File file = new File(this.outPath+"/query1.csv");
-            try {
-                FileWriter writer = new FileWriter(file);
-                Map<String, Long> result = future.get();
-                result.entrySet().forEach(
-                        (entry)->writer.write(entry.getKey()+";"+entry.getValue()));
-
-            } catch (IOException e) {
-                this.logger.error("Unable to Open file: "+this.outPath+"/query1.csv"+" \n");
-            }
-            this.logger.info("Map-reduce finished...");
-            for(Map.Entry<String,Long> e : result.entrySet()) {
-                System.out.println(e.getKey() + " " + e.getValue());
-            }
-
-        } catch (InterruptedException e) {
-            this.logger.error("Interrupted result fetching");
-            throw new RuntimeException(e);
+            File file = new File(this.outPath+"/"+queryOutputFile);
+            if(!file.exists())
+               file.createNewFile();
+            FileWriter writer = new FileWriter(file);
+            writer.write(this.HEADER);
+            Map<String, Long> result = future.get();
+            this.logger.info(result.toString() + "\n");
+            this.logger.info("Map-reduce finished...\n");
+            this.logger.info("Generating file "+queryOutputFile+"\n");
+            for(Map.Entry<String,Long> entry : result.entrySet())
+                writer.write(entry.getKey()+";"+entry.getValue()+"\n");
+            this.logger.info("End of file "+queryOutputFile+" generation \n");
+            writer.close();
+        } catch (IOException e) {
+             this.logger.error("Unable to Open file: "+this.outPath+"/"+queryOutputFile+" \n");
+        }catch (InterruptedException e) {
+             this.logger.error("Interrupted result fetching");
         } catch (ExecutionException e) {
-            this.logger.error("Execution error");
-            throw new RuntimeException(e);
+             this.logger.error("Execution error");
         }
-
     }
 }

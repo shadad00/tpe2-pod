@@ -3,19 +3,18 @@ package ar.edu.pod.tp2.Reducer;
 import com.hazelcast.mapreduce.Reducer;
 import com.hazelcast.mapreduce.ReducerFactory;
 
-public class Query1Reducer implements ReducerFactory<String, Integer, Long> {
+public class Query5ReducerFirst implements ReducerFactory<String, Integer, Integer> {
 
     @Override
-    public Reducer<Integer, Long> newReducer(String s) {
-        return new query1Class();
+    public Reducer<Integer, Integer> newReducer(String o) {
+        return new MyReducer();
     }
 
-    private static class query1Class extends Reducer<Integer,Long>{
-        private Long sum;
-
+    private static class MyReducer extends Reducer<Integer, Integer>{
+        private Integer sum;
         @Override
         public void beginReduce() {
-            sum = 0L;
+            sum = 0;
         }
 
         @Override
@@ -24,7 +23,7 @@ public class Query1Reducer implements ReducerFactory<String, Integer, Long> {
         }
 
         @Override
-        public Long finalizeReduce() {
+        public Integer finalizeReduce() {
             return sum;
         }
     }

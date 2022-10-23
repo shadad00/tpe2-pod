@@ -23,11 +23,18 @@ public abstract class Query {
 
     protected String inPath;
     protected String outPath;
+    protected Integer minPedestrianNumber;
     protected HazelcastInstance hazelcastInstance;
     protected final List<String> addresses=new ArrayList<>();
     protected Logger logger = LoggerFactory.getLogger(Query.class);
     protected IList<SensorReading> readingIList;
     protected IMap<Integer, Sensor> sensorIMap;
+    protected String queryOutputFile;
+    protected String HEADER;
+    protected String readingsListName;
+    protected String sensorMapName;
+
+
 
     public void readArguments(){
         // Parse addresses
@@ -36,6 +43,7 @@ public abstract class Query {
         // Parse paths
         this.inPath = Optional.ofNullable(System.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
         this.outPath = Optional.ofNullable(System.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
+        this.minPedestrianNumber = Integer.valueOf(System.getProperty("min"));
     }
     public void configHazelcast(){
         final ClientConfig config = new ClientConfig();
@@ -67,12 +75,15 @@ public abstract class Query {
 
     protected void run(String readingsListName,String sensorMapName ){
         try{
+            this.logger.info("Reading arguments from system\n");
             readArguments();
         }catch (IllegalArgumentException e ){
             this.logger.error("Invalid argument");
         }
-        configHazelcast();
+            this.logger.info("Connecting to Hazelcast cluster \n");
+            configHazelcast();
         try {
+            this.logger.info("Loading data to Hazelcast cluster \n");
             loadData(readingsListName,sensorMapName);
         }catch (IOException e){
             this.logger.error("Unable to open csv files");
