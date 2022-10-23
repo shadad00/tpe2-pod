@@ -26,4 +26,7 @@ public class Sensor implements Serializable {
         return status;
     }
 
+    public boolean isActive(){
+        return status.equals(SensorStatus.A);
+    }
 }

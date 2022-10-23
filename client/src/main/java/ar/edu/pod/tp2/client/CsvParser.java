@@ -17,13 +17,13 @@ import java.util.List;
 abstract class CsvParser {
 
     private String path;
-    private static final Logger logger = LoggerFactory.getLogger(CsvParser.class);
+    protected final Logger logger = LoggerFactory.getLogger(CsvParser.class);
 
     public CsvParser(String path){
         this.path = path;
     }
 
-    void parse() throws IOException{
+    public void parse() throws IOException{
         logger.info("Inicio de la lectura del archivo");
         List<String> lines = Files.readAllLines(new File(this.getPath()).toPath(), StandardCharsets.ISO_8859_1);
         lines.remove(0);

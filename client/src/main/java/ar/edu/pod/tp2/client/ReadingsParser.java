@@ -2,18 +2,23 @@ package ar.edu.pod.tp2.client;
 
 
 
-import ar.edu.pod.tp2.Pair;
+import ar.edu.pod.tp2.Sensor;
 import ar.edu.pod.tp2.SensorReading;
+import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 
 public class ReadingsParser extends CsvParser {
 
-    private final IMap<Pair<Integer, LocalDateTime>,SensorReading> readingMap;
-    public ReadingsParser(String path, IMap<Pair<Integer, LocalDateTime>, SensorReading> map) {
-        super(path);
-        this.readingMap = map;
+    private final IList<SensorReading> sensorReadingsList;
+    private final IMap<Integer, Sensor> sensorIMap;
+
+    public ReadingsParser(String path, IList<SensorReading> sensorReadingsList, IMap<Integer, Sensor> sensorIMap) {
+        super(path.concat("/readings.csv"));
+        this.sensorReadingsList = sensorReadingsList;
+        this.sensorIMap = sensorIMap;
     }
 
     private static final int YEAR = 2;
@@ -44,15 +49,18 @@ public class ReadingsParser extends CsvParser {
         int hourlyCounts, sensorId;
         LocalDateTime readingDate =  LocalDateTime.of(
                 Integer.parseInt(line[YEAR]),
-                Integer.parseInt(line[MONTH]),
+                Month.valueOf(line[MONTH].toUpperCase()),   // TODO: mejorar por temas de performance
                 Integer.parseInt(line[MDATE]),
                 Integer.parseInt(line[TIME]),
                 0);
-
+        String day = line[DAY];
         sensorId =  Integer.parseInt(line[SENSOR_ID]);
         hourlyCounts = Integer.parseInt(line[HOURLY_COUNTS]);
-        SensorReading sensorReading = new SensorReading(readingDate, sensorId, hourlyCounts);
-        readingMap.put(new Pair<>(sensorId, readingDate), sensorReading);
+        Sensor sensor = sensorIMap.get(sensorId);
+        this.logger.info(sensor.getSensorId()+" "+sensor.getSensorDescription()+" "+sensor.getStatus()+" \n");
+        SensorReading sensorReading = new SensorReading(readingDate, sensorId, sensor.getSensorDescription(),sensor.getStatus()
+                , hourlyCounts, day);
+        sensorReadingsList.add(sensorReading);
     }
 }
 

@@ -12,7 +12,7 @@ public  class SensorsParser  extends CsvParser {
     private final IMap<Integer, Sensor> sensorIMap;
 
     public SensorsParser(String path,IMap<Integer, Sensor> sensorIMap) {
-        super(path);
+        super(path.concat("/sensors.csv"));
         this.sensorIMap = sensorIMap;
     }
 

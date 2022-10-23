@@ -37,5 +37,7 @@ public class Server {
 
 //        config.setManagementCenterConfig(managementCenterConfig);
         Hazelcast.newHazelcastInstance(config);
+
+
     }
 }

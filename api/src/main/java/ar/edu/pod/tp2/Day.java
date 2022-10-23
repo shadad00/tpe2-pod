@@ -14,5 +14,14 @@ public enum Day {
     Day(String day) {
         this.day = day;
     }
+
+    public boolean isWeekDay(){
+        return ordinal() <= 4;
+    }
+
+    @Override
+    public String toString(){
+        return this.day;
+    }
 }
 
