@@ -52,7 +52,7 @@ public class Query3 extends Query {
         Iterable<Pair<String, Pair<Integer, LocalDateTime>>> result = (Iterable<Pair<String, Pair<Integer, LocalDateTime>>>)answer;
         for(Pair<String, Pair<Integer, LocalDateTime>> entry : result)
             writer.write(entry.getKey()+";"+entry.getValue().getKey()+";"
-                    + DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm").format(entry.getValue().getValue())+"\n");
+                    + DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm").format(entry.getValue().getValue())+"\n");
     }
 
 
