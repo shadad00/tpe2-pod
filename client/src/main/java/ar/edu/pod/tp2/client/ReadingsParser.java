@@ -9,16 +9,32 @@ import com.hazelcast.core.IMap;
 
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ReadingsParser extends CsvParser {
 
     private final IList<SensorReading> sensorReadingsList;
-    private final IMap<Integer, Sensor> sensorIMap;
+    private final Map<Integer, Sensor> sensorMap;
+    private static Map<String, Integer> months;
 
-    public ReadingsParser(String path, IList<SensorReading> sensorReadingsList, IMap<Integer, Sensor> sensorIMap) {
+    public ReadingsParser(String path, IList<SensorReading> sensorReadingsList, Map<Integer, Sensor> sensorMap) {
         super(path.concat("/readings.csv"));
         this.sensorReadingsList = sensorReadingsList;
-        this.sensorIMap = sensorIMap;
+        this.sensorMap = sensorMap;
+        this.months = new HashMap<>();
+        months.put("January", 1);
+        months.put("February", 2);
+        months.put("March", 3);
+        months.put("April", 4);
+        months.put("May", 5);
+        months.put("June", 6);
+        months.put("July", 7);
+        months.put("August", 8);
+        months.put("September", 9);
+        months.put("October", 10);
+        months.put("November", 11);
+        months.put("December", 12);
     }
 
     private static final int YEAR = 2;
@@ -49,14 +65,14 @@ public class ReadingsParser extends CsvParser {
         int hourlyCounts, sensorId;
         LocalDateTime readingDate =  LocalDateTime.of(
                 Integer.parseInt(line[YEAR]),
-                Month.valueOf(line[MONTH].toUpperCase()),   // TODO: mejorar por temas de performance
+                months.get(line[MONTH]),   // TODO: mejorar por temas de performance
                 Integer.parseInt(line[MDATE]),
                 Integer.parseInt(line[TIME]),
                 0);
         String day = line[DAY];
         sensorId =  Integer.parseInt(line[SENSOR_ID]);
         hourlyCounts = Integer.parseInt(line[HOURLY_COUNTS]);
-        Sensor sensor = sensorIMap.get(sensorId);
+        Sensor sensor = sensorMap.get(sensorId);
         SensorReading sensorReading = new SensorReading(readingDate, sensorId, sensor.getSensorDescription(),sensor.getStatus()
                 , hourlyCounts, day);
         sensorReadingsList.add(sensorReading);

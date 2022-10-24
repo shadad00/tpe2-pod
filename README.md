@@ -34,8 +34,7 @@ chmod u+x *
 ####Query 1
 Ejecución de query 1 utilizando el script:
 ```
-./scripts/query1.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' 
--i <inPath> -o <outPath>
+./scripts/query1.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath>
 ```
 Ejecución de query 1 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
 ```
@@ -44,8 +43,7 @@ Ejecución de query 1 sin utilizar el script (recordar ejecutar los comandos men
 ####Query 2
 Ejecución de query 2 utilizando el script:
 ```
-./scripts/query2.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' 
--i <inPath> -o <outPath>
+./scripts/query2.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath>
 ```
 Ejecución de query 2 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
 ```
@@ -54,8 +52,7 @@ Ejecución de query 2 sin utilizar el script (recordar ejecutar los comandos men
 ####Query 3
 Ejecución de query 3 utilizando el script:
 ```
-./scripts/query3.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' 
--i <inPath> -o <outPath> -m <min>
+./scripts/query3.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> -m <min>
 ```
 Ejecución de query 3 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
 ```
@@ -64,8 +61,7 @@ Ejecución de query 3 sin utilizar el script (recordar ejecutar los comandos men
 ####Query 4
 Ejecución de query 4 utilizando el script:
 ```
-./scripts/query4.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' 
--i <inPath> -o <outPath> -n <n> -y <year>
+./scripts/query4.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> -n <n> -y <year>
 ```
 Ejecución de query 4 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
 ```
@@ -74,8 +70,7 @@ Ejecución de query 4 sin utilizar el script (recordar ejecutar los comandos men
 ####Query 5
 Ejecución de query 5 utilizando el script:
 ```
-./scripts/query5.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' 
--i <inPath> -o <outPath>
+./scripts/query5.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath>
 ```
 Ejecución de query 5 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
 ```
