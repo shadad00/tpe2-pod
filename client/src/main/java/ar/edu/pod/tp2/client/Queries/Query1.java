@@ -3,6 +3,7 @@ package ar.edu.pod.tp2.client.Queries;
 import ar.edu.pod.tp2.*;
 import ar.edu.pod.tp2.Mappers.Query1Mapper;
 import ar.edu.pod.tp2.Reducer.Query1Reducer;
+import ar.edu.pod.tp2.client.CustomLog;
 import com.hazelcast.core.*;
 import com.hazelcast.mapreduce.Job;
 import com.hazelcast.mapreduce.JobTracker;
@@ -40,7 +41,14 @@ public class Query1  extends Query {
         KeyValueSource<String, SensorReading> readingsSource = KeyValueSource.fromList(readingIList);
 
         Job<String, SensorReading> job = readingsJobTracker.newJob(readingsSource);
-
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query1.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                outPath + "time1.txt",
+                "Map-reduce starting...",
+                true
+        );
         this.logger.info("Map-reduce starting...");
         ICompletableFuture<Map<String, Long>> future = job
                 .mapper(new Query1Mapper())
@@ -57,6 +65,14 @@ public class Query1  extends Query {
             Map<String, Long> result = future.get();
             this.logger.info(result.toString() + "\n");
             this.logger.info("Map-reduce finished...\n");
+            CustomLog.GetInstance().writeTimestamp(
+                    Thread.currentThread().getStackTrace()[1].getMethodName(),
+                    Query1.class.getName(),
+                    Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                    outPath + "time1.txt",
+                    "Map-reduce finished...",
+                    true
+            );
             this.logger.info("Generating file "+queryOutputFile+"\n");
             for(Map.Entry<String,Long> entry : result.entrySet())
                 writer.write(entry.getKey()+";"+entry.getValue()+"\n");

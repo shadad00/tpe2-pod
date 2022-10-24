@@ -63,13 +63,13 @@ public abstract class Query {
         IList<SensorReading> readingIMap = this.hazelcastInstance.getList(sensorReadingMapName);
         readingIMap.clear();
         IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
-        ReadingsParser readingsParser = new ReadingsParser(inPath, readingIMap, sensorIMap);
+        ReadingsParser readingsParser = new ReadingsParser(inPath, readingIMap, sensorIMap, outPath + "time1.txt");
         readingsParser.parse();
     }
     private void loadSensorDescription(String sensorDescriptionMapName) throws IOException {
         IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
         sensorIMap.clear();
-        SensorsParser sensorsParser = new SensorsParser(inPath, sensorIMap);
+        SensorsParser sensorsParser = new SensorsParser(inPath, sensorIMap, outPath + "time1.txt");
         sensorsParser.parse();
     }
 

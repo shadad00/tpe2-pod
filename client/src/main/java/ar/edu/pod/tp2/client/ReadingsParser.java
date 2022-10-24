@@ -15,8 +15,8 @@ public class ReadingsParser extends CsvParser {
     private final IList<SensorReading> sensorReadingsList;
     private final IMap<Integer, Sensor> sensorIMap;
 
-    public ReadingsParser(String path, IList<SensorReading> sensorReadingsList, IMap<Integer, Sensor> sensorIMap) {
-        super(path.concat("/readings.csv"));
+    public ReadingsParser(String path, IList<SensorReading> sensorReadingsList, IMap<Integer, Sensor> sensorIMap, String logPath) {
+        super(path.concat("/readings.csv"), logPath, true);
         this.sensorReadingsList = sensorReadingsList;
         this.sensorIMap = sensorIMap;
     }
