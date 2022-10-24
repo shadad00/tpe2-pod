@@ -66,7 +66,7 @@ public class Query3 extends Query {
             this.logger.info("Generating file "+queryOutputFile+"\n");
             for(Pair<String, Pair<Integer, LocalDateTime>> entry : result)
                 writer.write(entry.getKey()+";"+entry.getValue().getKey()+";"
-                        + entry.getValue().getValue()+"\n");
+                        + DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm").format(entry.getValue().getValue())+"\n");
             this.logger.info("Ending of file "+queryOutputFile+" generator \n");
             writer.close();
         } catch (IOException e) {
