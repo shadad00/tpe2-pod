@@ -46,6 +46,7 @@ public abstract class Query {
         // Parse paths
         this.inPath = Optional.ofNullable(System.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
         this.outPath = Optional.ofNullable(System.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
+        //TODO: FRANCO ARMANI
         try{
             this.year = Integer.valueOf(System.getProperty("year",null));
         }catch (IllegalArgumentException e){};

@@ -2,6 +2,7 @@ package ar.edu.pod.tp2.client.Queries;
 
 import ar.edu.pod.tp2.*;
 import ar.edu.pod.tp2.Collators.Query1Collator;
+import ar.edu.pod.tp2.Combiner.Query1Combiner;
 import ar.edu.pod.tp2.Mappers.Query1Mapper;
 import ar.edu.pod.tp2.Reducer.Query1Reducer;
 import com.hazelcast.core.*;
@@ -47,6 +48,7 @@ public class Query1  extends Query {
         this.logger.info("Map-reduce starting...");
         JobCompletableFuture<Collection<Pair<String, Long>>> future = job
                 .mapper(new Query1Mapper())
+                .combiner(new Query1Combiner())
                 .reducer(new Query1Reducer())
                 .submit(new Query1Collator());
 
