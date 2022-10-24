@@ -10,40 +10,59 @@ import com.hazelcast.config.GroupConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
+import com.hazelcast.mapreduce.Job;
+import com.hazelcast.mapreduce.JobTracker;
+import com.hazelcast.mapreduce.KeyValueSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class Query {
 
     protected String inPath;
     protected String outPath;
     protected Integer minPedestrianNumber;
-    protected HazelcastInstance hazelcastInstance;
+    protected Integer year;
+    protected Integer maxNumber;
     protected final List<String> addresses=new ArrayList<>();
-    protected Logger logger = LoggerFactory.getLogger(Query.class);
+    protected HazelcastInstance hazelcastInstance;
     protected IList<SensorReading> readingIList;
     protected IMap<Integer, Sensor> sensorIMap;
+    protected Logger logger = LoggerFactory.getLogger(Query.class);
     protected String queryOutputFile;
     protected String HEADER;
     protected String readingsListName;
     protected String sensorMapName;
+    protected String jobName;
+    protected Job<String,SensorReading> job;
+
+    protected JobTracker readingsJobTracker;
 
 
+    public Query(String readingsListName,String sensorMapName,String queryOutputFile,String header,String jobName) {
+        this.queryOutputFile = queryOutputFile;
+        this.HEADER = header;
+        this.readingsListName = readingsListName;
+        this.sensorMapName = sensorMapName;
+        this.jobName=jobName;
+    }
 
     public void readArguments(){
-        // Parse addresses
-        String addressesArgument = Optional.ofNullable(System.getProperty("addresses")).orElseThrow(IllegalArgumentException::new);
+        Properties properties = System.getProperties();
+        String addressesArgument = Optional.ofNullable(properties.getProperty("addresses")).orElseThrow(IllegalArgumentException::new);
         addresses.addAll(Arrays.asList(addressesArgument.split(";")));
-        // Parse paths
-        this.inPath = Optional.ofNullable(System.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
-        this.outPath = Optional.ofNullable(System.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
-        this.minPedestrianNumber = Integer.valueOf(System.getProperty("min"));
+        this.inPath = Optional.ofNullable(properties.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
+        this.outPath = Optional.ofNullable(properties.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
+        if(properties.containsKey("year"))
+            this.year = Integer.valueOf(System.getProperty("year",null));
+        if(properties.containsKey("n"))
+            this.maxNumber = Integer.valueOf(System.getProperty("n",null));
+        if(properties.containsKey("min"))
+            this.minPedestrianNumber = Integer.valueOf(System.getProperty("min",null));
     }
     public void configHazelcast(){
         final ClientConfig config = new ClientConfig();
@@ -73,7 +92,7 @@ public abstract class Query {
         sensorsParser.parse();
     }
 
-    protected void run(String readingsListName,String sensorMapName ){
+    protected void initializeContext(String readingsListName, String sensorMapName ){
         try{
             this.logger.info("Reading arguments from system\n");
             readArguments();
@@ -90,7 +109,34 @@ public abstract class Query {
         }
         this.readingIList = this.hazelcastInstance.getList(readingsListName);
         this.sensorIMap = this.hazelcastInstance.getMap(sensorMapName);
+        this.readingsJobTracker = this.hazelcastInstance.getJobTracker(jobName);
+        KeyValueSource<String, SensorReading> readingsSource = KeyValueSource.fromList(readingIList);
+        this.job = readingsJobTracker.newJob( readingsSource);
     }
+
+    protected void generateAnswer(Iterable answer){
+        this.logger.info("Map-reduce finished...\n");
+        this.logger.info("Generating file "+queryOutputFile+"\n");
+        try {
+            FileWriter writer = openOutputFile();
+            writeResults(answer,writer);
+            this.logger.info("End of file "+queryOutputFile+" generation \n");
+            writer.close();
+        } catch (IOException e) {
+            this.logger.error("Unable to Open file: "+this.outPath+"/"+queryOutputFile+" \n");
+        }
+    }
+
+    private FileWriter openOutputFile() throws IOException {
+        File file = new File(this.outPath+"/"+queryOutputFile);
+        if(!file.exists())
+            file.createNewFile();
+        FileWriter writer = new FileWriter(file);
+        writer.write(this.HEADER);
+        return writer;
+    }
+
+    protected abstract void writeResults(Iterable<?> answer,FileWriter writer) throws IOException;
 
 
 }
