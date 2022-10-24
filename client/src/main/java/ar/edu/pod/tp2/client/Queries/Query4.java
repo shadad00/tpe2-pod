@@ -2,6 +2,7 @@ package ar.edu.pod.tp2.client.Queries;
 
 import ar.edu.pod.tp2.Collators.Query4Collator;
 import ar.edu.pod.tp2.Mappers.Query4Mapper_MonthValue;
+import ar.edu.pod.tp2.MonthLocal;
 import ar.edu.pod.tp2.Pair;
 import ar.edu.pod.tp2.Reducer.Query4Reducer_MonthValue;
 import com.hazelcast.mapreduce.JobCompletableFuture;
@@ -53,9 +54,10 @@ public class Query4 extends Query{
     @Override
     protected void writeResults(Iterable<?> answer, FileWriter writer) throws IOException {
         Iterable<Pair<Pair<String, Month>, Double>> result= (Iterable<Pair<Pair<String, Month>, Double>>) answer;
-        for(Pair<Pair<String, Month>, Double> entry : result)
-            writer.write(entry.getKey().getKey()+";"+entry.getKey().getValue()+";"
+        for(Pair<Pair<String, Month>, Double> entry : result){
+            writer.write(entry.getKey().getKey()+";"+ MonthLocal.valueOf(entry.getKey().getValue().toString()) +";"
                     + entry.getValue()+"\n");
+        }
     }
 
 
