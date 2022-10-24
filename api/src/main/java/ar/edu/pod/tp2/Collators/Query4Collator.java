@@ -7,15 +7,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Query4Collator implements Collator<Map.Entry<Pair<String, Month>,Double>, Collection<Pair<Pair<String, Month>,Double>>> {
 
     private final int n;
 
-    private static final Comparator<Pair<Pair<String, Month>, Double>> ENTRY_COMPARATOR = (o1, o2) -> {
-        int res = o2.getValue().compareTo(o1.getValue());
-        return res == 0 ? o1.getKey().getKey().compareTo(o2.getKey().getKey()) : res;
-    };
+    private static final Comparator<Pair<Month, Double>> ENTRY_COMPARATOR = (a, b) -> Double.compare(b.getValue(), a.getValue());
+    private static final Comparator<Pair<Pair<String, Month>, Double>> ENTRY_COMPARATOR_2 = (a, b) -> Double.compare(b.getValue(), a.getValue());
 
     public Query4Collator(int n){
         this.n = n;
@@ -25,22 +24,19 @@ public class Query4Collator implements Collator<Map.Entry<Pair<String, Month>,Do
     @Override
     public Collection<Pair<Pair<String, Month>, Double>> collate(Iterable<Map.Entry<Pair<String, Month>, Double>> iterable) {
 
-        TreeSet<Pair<Pair<String, Month>, Double>> ans = new TreeSet<>(ENTRY_COMPARATOR);
+        Map<String, SortedSet<Pair<Month, Double>>> ans = new HashMap<>();
 
         iterable.forEach(e -> {
             e.setValue(round(e.getValue(), 2));
-            ans.add(new Pair<>(new Pair<>(e.getKey().getKey(), e.getKey().getValue()), e.getValue()));
+            ans.putIfAbsent(e.getKey().getKey(), new TreeSet<>(ENTRY_COMPARATOR));
+            ans.get(e.getKey().getKey()).add(new Pair<>(e.getKey().getValue(), e.getValue()));
         });
 
-        List<Pair<Pair<String, Month>, Double>> firstNResults = new ArrayList<>(this.n);
-        Iterator<Pair<Pair<String, Month>, Double>> iterator = ans.iterator();
-        int count = 0;
-        while (count < n && iterator.hasNext()){
-            firstNResults.add(iterator.next());
-            count++;
-        }
-
-        return firstNResults;
+        return ans.entrySet().stream()
+                .map(entry -> new Pair<>(new Pair<>(entry.getKey(), entry.getValue().first().getKey()), entry.getValue().first().getValue()))
+                .sorted(ENTRY_COMPARATOR_2)
+                .limit(n)
+                .collect(Collectors.toList());
     }
 
 
