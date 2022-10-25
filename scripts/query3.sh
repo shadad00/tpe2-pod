@@ -11,4 +11,4 @@ do
         m) min=${OPTARG};;
     esac
 done
-./query3.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath" -Dmin=$min
+./query3.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath" -Dmin=$min -Dram

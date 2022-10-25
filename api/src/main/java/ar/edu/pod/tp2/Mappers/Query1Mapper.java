@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Query1Mapper implements Mapper< String, SensorReading, String, Integer> {
+public class Query1Mapper implements Mapper< String, SensorReading, String, Long> {
 
     @Override
-    public void map(String s, SensorReading sensorReading, Context<String, Integer> context) {
+    public void map(String s, SensorReading sensorReading, Context<String, Long> context) {
         if (sensorReading.getSensorStatus().equals(SensorStatus.A)){
-            context.emit(sensorReading.getSensorDescription(), sensorReading.getHourlyCounts());
+            context.emit(sensorReading.getSensorDescription(), Long.valueOf(sensorReading.getHourlyCounts()));
         }
     }
 }

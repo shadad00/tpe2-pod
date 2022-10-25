@@ -5,19 +5,24 @@ import com.hazelcast.mapreduce.CombinerFactory;
 
 import java.util.Map;
 
-public class Query1Combiner implements CombinerFactory<String,Integer,Long> {
+public class Query1Combiner implements CombinerFactory<String,Long,Long> {
 
     @Override
-    public Combiner<Integer, Long> newCombiner(String s) {
+    public Combiner<Long, Long> newCombiner(String s) {
         return new Query1CombinerClass();
     }
 
-    public static class Query1CombinerClass extends Combiner<Integer, Long>{
+    public static class Query1CombinerClass extends Combiner<Long, Long>{
 
         private Long suma = 0L;
 
         @Override
-        public void combine(Integer integer) {
+        public void reset() {
+            suma = 0L;
+        }
+
+        @Override
+        public void combine(Long integer) {
             suma+=integer;
         }
 

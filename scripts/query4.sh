@@ -12,4 +12,4 @@ do
         y) year=${OPTARG};;
     esac
 done
-./query4.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath" -Dyear=$year -Dn=$n
+./query4.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath" -Dyear="$year" -Dn="$n" -Dram

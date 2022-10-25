@@ -9,8 +9,7 @@ public class Query2Mapper  implements Mapper< String, SensorReading, Integer, Pa
 
     @Override
     public void map(String s, SensorReading sensorReading, Context<Integer, Pair<Day, Integer>> context) {
-        if (sensorReading.getSensorStatus().equals(SensorStatus.A)){
-        context.emit(sensorReading.getYear(), new Pair<>(sensorReading.getDay(), sensorReading.getHourlyCounts()));
-        }
+         context.emit(sensorReading.getYear(), new Pair<>(sensorReading.getDay(), sensorReading.getHourlyCounts()));
     }
+
 }

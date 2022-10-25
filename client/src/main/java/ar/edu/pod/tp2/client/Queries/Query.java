@@ -66,7 +66,7 @@ public abstract class Query {
             this.maxNumber = Integer.valueOf(System.getProperty("n",null));
         if(properties.containsKey("min"))
             this.minPedestrianNumber = Integer.valueOf(System.getProperty("min",null));
-        if(properties.containsKey("sensorRam")){
+        if(properties.containsKey("ram")){
             this.sensorsInRam= true;
             this.logger.info("Storing SensorMap in ram");
         }else this.logger.info("Storing SensorMap in cluster");
@@ -131,7 +131,7 @@ public abstract class Query {
     protected void generateAnswer(Iterable answer){
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
-                Query1.class.getName(),
+                Query.class.getName(),
                 Thread.currentThread().getStackTrace()[1].getLineNumber(),
                 timeLogPath,
                 "Map-reduce finished...",

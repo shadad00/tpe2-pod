@@ -43,7 +43,7 @@ public class Query1  extends Query {
         this.logger.info("Map-reduce starting...");
         JobCompletableFuture<Collection<Pair<String, Long>>> future = job
                 .mapper(new Query1Mapper())
-                .combiner(new Query1Combiner())
+                //.combiner(new Query1Combiner())
                 .reducer(new Query1Reducer())
                 .submit(new Query1Collator());
 

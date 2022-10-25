@@ -6,10 +6,10 @@ import com.hazelcast.mapreduce.ReducerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Query5ReducerSecond implements ReducerFactory<Integer, String, List<String>> {
+public class Query5ReducerSecond implements ReducerFactory<Long, String, List<String>> {
 
     @Override
-    public Reducer<String, List<String>> newReducer(Integer integer) {
+    public Reducer<String, List<String>> newReducer(Long integer) {
         return new MyReducer();
     }
 

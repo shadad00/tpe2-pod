@@ -29,7 +29,7 @@ public class Query3 extends Query {
 
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName, "time3.txt");
+        initializeContext(this.readingsListName,this.sensorMapName, "/time3.txt");
         if(this.minPedestrianNumber == null)
             throw new IllegalArgumentException("Invalid usage: Min number of pedestrian required");
         this.logger.info("Map-reduce starting...");

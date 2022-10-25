@@ -30,7 +30,7 @@ public class Query4 extends Query{
 
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName,  "time4.txt");
+        initializeContext(this.readingsListName,this.sensorMapName,  "/time4.txt");
         if(this.year == null || this.maxNumber == null)
             throw new IllegalArgumentException("N or year argument is missing");
         CustomLog.GetInstance().writeTimestamp(

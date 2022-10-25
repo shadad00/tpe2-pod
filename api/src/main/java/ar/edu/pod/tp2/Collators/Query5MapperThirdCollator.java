@@ -8,16 +8,29 @@ import org.slf4j.LoggerFactory;
 import java.time.Month;
 import java.util.*;
 
-public class Query5MapperThirdCollator implements Collator<Map.Entry<Integer, List<String>>, Collection<Pair<Integer, Pair<String, String> >>> {
+public class Query5MapperThirdCollator implements Collator<Map.Entry<Long, List<String>>, Collection<Pair<Long, Pair<String, String> >>> {
 
     private Integer MILLION = 1000000;
 
-    private static final Comparator<Pair<Integer, Pair<String,String>>> ENTRY_COMPARATOR = (o1, o2) -> o2.getKey().compareTo(o1.getKey());
-    @Override
-    public Collection<Pair<Integer, Pair<String, String>>> collate(Iterable<Map.Entry<Integer, List<String>>> iterable) {
-        SortedSet<Pair<Integer, Pair<String,String>>> returnList = new TreeSet<>(ENTRY_COMPARATOR);
+    private static final Comparator<Pair<Long, Pair<String,String>>> ENTRY_COMPARATOR = (o1, o2) -> {
+        int compareTo = o2.getKey().compareTo(o1.getKey());
+        if (compareTo==0){
+            Pair<String, String> pair1= o1.getValue();
+            Pair<String, String> pair2 = o2.getValue();
 
-        for(Map.Entry<Integer,List<String>> entry : iterable){
+            compareTo = pair1.getKey().compareTo(pair2.getKey());
+            if (compareTo == 0){
+                return pair1.getValue().compareTo(pair2.getValue());
+            }
+        }
+        return compareTo;
+    };
+
+    @Override
+    public Collection<Pair<Long, Pair<String, String>>> collate(Iterable<Map.Entry<Long, List<String>>> iterable) {
+        List<Pair<Long, Pair<String,String>>> returnList = new LinkedList<>();
+
+        for(Map.Entry<Long,List<String>> entry : iterable){
             List<String> sensors = entry.getValue();
             for (int i = 0; i < sensors.size(); i++) {
                 for (int j = i+1; j < sensors.size() ; j++) {
@@ -29,7 +42,8 @@ public class Query5MapperThirdCollator implements Collator<Map.Entry<Integer, Li
                 }
             }
         }
-
+        returnList.sort(ENTRY_COMPARATOR);
         return returnList;
+
     }
 }

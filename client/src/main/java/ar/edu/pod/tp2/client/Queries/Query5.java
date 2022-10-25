@@ -32,7 +32,7 @@ public class Query5 extends Query{
 
     }
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName, "time5.txt");
+        initializeContext(this.readingsListName,this.sensorMapName, "/time5.txt");
         this.logger.info("First Map-reduce starting...");
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
@@ -42,12 +42,12 @@ public class Query5 extends Query{
                 "First Map-reduce starting...",
                 true
         );
-        ICompletableFuture<Map<String,Integer>> future = job
+        ICompletableFuture<Map<String,Long>> future = job
                 .mapper(new Query5MapperFirst())
                 .reducer( new Query5ReducerFirst() )
                 .submit();
 
-        Map<String, Integer> result = null;
+        Map<String, Long> result = null;
 
         try {
             result = future.get();
@@ -64,13 +64,13 @@ public class Query5 extends Query{
             throw new RuntimeException(e);
         }
 
-        IMap<String , Integer> inter = this.hazelcastInstance.getMap("Inter");
+        IMap<String , Long> inter = this.hazelcastInstance.getMap("Inter");
         inter.putAll(result);
         this.logger.info("Inter map has "+this.hazelcastInstance.getMap("Inter").size()+" elements\n");
 
 
-        KeyValueSource<String, Integer> interSource = KeyValueSource.fromMap(inter);
-        Job<String, Integer> job2 = readingsJobTracker.newJob( interSource);
+        KeyValueSource<String, Long> interSource = KeyValueSource.fromMap(inter);
+        Job<String, Long> job2 = readingsJobTracker.newJob( interSource);
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
                 Query5.class.getName(),
@@ -81,7 +81,7 @@ public class Query5 extends Query{
         );
         this.logger.info("Second Map-reduce  starting...");
 
-        ICompletableFuture<Collection<Pair<Integer, Pair<String, String> >>> futureFinal = job2
+        ICompletableFuture<Collection<Pair<Long, Pair<String, String> >>> futureFinal = job2
                 .mapper(new Query5MapperSecond())
                 .reducer( new Query5ReducerSecond() )
                 .submit(new Query5MapperThirdCollator());
@@ -98,7 +98,7 @@ public class Query5 extends Query{
 
 
         try {
-            Collection<Pair<Integer, Pair<String, String> >> finalResult = futureFinal.get();
+            Collection<Pair<Long, Pair<String, String> >> finalResult = futureFinal.get();
             generateAnswer(finalResult);
         }catch (InterruptedException f) {
             this.logger.error("Unable to fetch map-reduce results \n");
