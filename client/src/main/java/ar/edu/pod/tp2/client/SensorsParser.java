@@ -6,14 +6,15 @@ import ar.edu.pod.tp2.SensorStatus;
 import com.hazelcast.core.IMap;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public  class SensorsParser  extends CsvParser {
 
-    private final IMap<Integer, Sensor> sensorIMap;
+    private final Map<Integer, Sensor> sensorMap;
 
-    public SensorsParser(String path,IMap<Integer, Sensor> sensorIMap, String logPath) {
+    public SensorsParser(String path, Map<Integer, Sensor> sensorMap, String logPath) {
         super(path.concat("/sensors.csv"), logPath, false);
-        this.sensorIMap = sensorIMap;
+        this.sensorMap = sensorMap;
     }
 
     private static final int SENSOR_ID = 0;
@@ -39,6 +40,6 @@ public  class SensorsParser  extends CsvParser {
     void loadData(String[] line) {
         int sensorId= Integer.parseInt(line[SENSOR_ID]);
         Sensor sensor = new Sensor(sensorId, line[SENSOR_DESC], SensorStatus.valueOf(line[STATUS]));
-        this.sensorIMap.put(sensorId,sensor);
+        this.sensorMap.put(sensorId,sensor);
     }
 }

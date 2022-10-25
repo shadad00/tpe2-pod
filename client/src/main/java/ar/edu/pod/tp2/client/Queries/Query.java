@@ -41,6 +41,7 @@ public abstract class Query {
     protected String sensorMapName;
     protected String jobName;
     protected Job<String,SensorReading> job;
+    protected boolean sensorsInRam;
 
     protected JobTracker readingsJobTracker;
 
@@ -65,6 +66,11 @@ public abstract class Query {
             this.maxNumber = Integer.valueOf(System.getProperty("n",null));
         if(properties.containsKey("min"))
             this.minPedestrianNumber = Integer.valueOf(System.getProperty("min",null));
+        if(properties.containsKey("sensorRam")){
+            this.sensorsInRam= true;
+            this.logger.info("Storing SensorMap in ram");
+        }else this.logger.info("Storing SensorMap in cluster");
+
     }
     public void configHazelcast(){
         final ClientConfig config = new ClientConfig();
@@ -75,23 +81,28 @@ public abstract class Query {
     }
 
     protected void loadData(String sensorReadingMapName, String sensorDescriptionMapName) throws IOException {
-        loadSensorDescription(sensorDescriptionMapName);
-        loadSensorReadings(sensorReadingMapName, sensorDescriptionMapName);
+        loadSensorReadings(sensorReadingMapName, loadSensorDescription(sensorDescriptionMapName));
     }
 
 
-    private void loadSensorReadings(String sensorReadingMapName, String sensorDescriptionMapName) throws IOException {
+    private void loadSensorReadings(String sensorReadingMapName, Map<Integer, Sensor> map) throws IOException {
         IList<SensorReading> readingIMap = this.hazelcastInstance.getList(sensorReadingMapName);
         readingIMap.clear();
-        IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
-        ReadingsParser readingsParser = new ReadingsParser(inPath, readingIMap, sensorIMap, timeLogPath);
+        ReadingsParser readingsParser = new ReadingsParser(inPath, readingIMap, map, timeLogPath);
         readingsParser.parse();
     }
-    private void loadSensorDescription(String sensorDescriptionMapName) throws IOException {
-        IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
-        sensorIMap.clear();
-        SensorsParser sensorsParser = new SensorsParser(inPath, sensorIMap, timeLogPath);
+
+    private Map<Integer, Sensor> loadSensorDescription(String sensorDescriptionMapName) throws IOException {
+        Map<Integer,Sensor> sensorMap;
+        if(sensorsInRam){
+            sensorMap= new HashMap<>();
+        }else {
+            sensorMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
+            sensorMap.clear();
+        }
+        SensorsParser sensorsParser = new SensorsParser(inPath, sensorMap, timeLogPath);
         sensorsParser.parse();
+        return sensorMap;
     }
 
     protected void initializeContext(String readingsListName, String sensorMapName, String timeLogPath){

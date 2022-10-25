@@ -10,4 +10,4 @@ do
         o) outPath=${OPTARG};;
     esac
 done
-./query1.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath"
+./query1.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath" -Dram
