@@ -5,6 +5,7 @@ import ar.edu.pod.tp2.Mappers.Query5MapperSecond;
 import ar.edu.pod.tp2.Pair;
 import ar.edu.pod.tp2.Reducer.Query5ReducerFirst;
 import ar.edu.pod.tp2.Reducer.Query5ReducerSecond;
+import ar.edu.pod.tp2.client.CustomLog;
 import com.hazelcast.core.ICompletableFuture;
 import com.hazelcast.core.IMap;
 import com.hazelcast.mapreduce.Job;
@@ -31,9 +32,16 @@ public class Query5 extends Query{
 
     }
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName);
+        initializeContext(this.readingsListName,this.sensorMapName, "time5.txt");
         this.logger.info("First Map-reduce starting...");
-
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query5.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "First Map-reduce starting...",
+                true
+        );
         ICompletableFuture<Map<String,Integer>> future = job
                 .mapper(new Query5MapperFirst())
                 .reducer( new Query5ReducerFirst() )
@@ -43,6 +51,14 @@ public class Query5 extends Query{
 
         try {
             result = future.get();
+            CustomLog.GetInstance().writeTimestamp(
+                    Thread.currentThread().getStackTrace()[1].getMethodName(),
+                    Query5.class.getName(),
+                    Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                    timeLogPath,
+                    "First Map-reduce finished...",
+                    true
+            );
             this.logger.info("First Map-reduce finished...\n");
         } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
@@ -55,7 +71,14 @@ public class Query5 extends Query{
 
         KeyValueSource<String, Integer> interSource = KeyValueSource.fromMap(inter);
         Job<String, Integer> job2 = readingsJobTracker.newJob( interSource);
-
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query5.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "Second Map-reduce starting...",
+                true
+        );
         this.logger.info("Second Map-reduce  starting...");
 
         ICompletableFuture<Collection<Pair<Integer, Pair<String, String> >>> futureFinal = job2
@@ -63,7 +86,14 @@ public class Query5 extends Query{
                 .reducer( new Query5ReducerSecond() )
                 .submit(new Query5MapperThirdCollator());
 
-
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query5.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "Second Map-reduce finished...",
+                true
+        );
         this.logger.info("Second Map-reduce finished...\n");
 
 

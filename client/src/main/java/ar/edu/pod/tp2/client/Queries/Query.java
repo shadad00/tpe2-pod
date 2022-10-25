@@ -2,6 +2,7 @@ package ar.edu.pod.tp2.client.Queries;
 
 import ar.edu.pod.tp2.Sensor;
 import ar.edu.pod.tp2.SensorReading;
+import ar.edu.pod.tp2.client.CustomLog;
 import ar.edu.pod.tp2.client.ReadingsParser;
 import ar.edu.pod.tp2.client.SensorsParser;
 import com.hazelcast.client.HazelcastClient;
@@ -25,6 +26,7 @@ public abstract class Query {
 
     protected String inPath;
     protected String outPath;
+    protected String timeLogPath = "";
     protected Integer minPedestrianNumber;
     protected Integer year;
     protected Integer maxNumber;
@@ -82,20 +84,21 @@ public abstract class Query {
         IList<SensorReading> readingIMap = this.hazelcastInstance.getList(sensorReadingMapName);
         readingIMap.clear();
         IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
-        ReadingsParser readingsParser = new ReadingsParser(inPath, readingIMap, sensorIMap, outPath + "time1.txt");
+        ReadingsParser readingsParser = new ReadingsParser(inPath, readingIMap, sensorIMap, timeLogPath);
         readingsParser.parse();
     }
     private void loadSensorDescription(String sensorDescriptionMapName) throws IOException {
         IMap<Integer, Sensor> sensorIMap = this.hazelcastInstance.getMap(sensorDescriptionMapName);
         sensorIMap.clear();
-        SensorsParser sensorsParser = new SensorsParser(inPath, sensorIMap, outPath + "time1.txt");
+        SensorsParser sensorsParser = new SensorsParser(inPath, sensorIMap, timeLogPath);
         sensorsParser.parse();
     }
 
-    protected void initializeContext(String readingsListName, String sensorMapName ){
+    protected void initializeContext(String readingsListName, String sensorMapName, String timeLogPath){
         try{
             this.logger.info("Reading arguments from system\n");
             readArguments();
+            this.timeLogPath = outPath + timeLogPath;
         }catch (IllegalArgumentException e ){
             this.logger.error("Invalid argument");
         }
@@ -115,6 +118,14 @@ public abstract class Query {
     }
 
     protected void generateAnswer(Iterable answer){
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query1.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "Map-reduce finished...",
+                true
+        );
         this.logger.info("Map-reduce finished...\n");
         this.logger.info("Generating file "+queryOutputFile+"\n");
         try {

@@ -4,6 +4,7 @@ import ar.edu.pod.tp2.Collators.Query2Collator;
 import ar.edu.pod.tp2.Mappers.Query2Mapper;
 import ar.edu.pod.tp2.Pair;
 import ar.edu.pod.tp2.Reducer.Query2Reducer;
+import ar.edu.pod.tp2.client.CustomLog;
 import com.hazelcast.mapreduce.JobCompletableFuture;
 
 import java.io.FileWriter;
@@ -26,8 +27,16 @@ public class Query2 extends Query {
 
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName);
+        initializeContext(this.readingsListName,this.sensorMapName, "time2.txt");
         this.logger.info("Map-reduce starting...");
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query2.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "Map-reduce starting...",
+                true
+        );
         JobCompletableFuture<Collection<Pair<Integer, Pair<Integer, Integer>>>> future = job
                 .mapper(new Query2Mapper())
                 .reducer( new Query2Reducer() )

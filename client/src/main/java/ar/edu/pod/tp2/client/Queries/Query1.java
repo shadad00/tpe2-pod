@@ -29,12 +29,14 @@ public class Query1  extends Query {
     }
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName);
+//        timeLogPath = outPath + "/time1.txt";
+//        logger.info("Aaaaaaaaa" + outPath);
+        initializeContext(this.readingsListName,this.sensorMapName, "/time1.txt");
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
                 Query1.class.getName(),
                 Thread.currentThread().getStackTrace()[1].getLineNumber(),
-                outPath + "time1.txt",
+                timeLogPath,
                 "Map-reduce starting...",
                 true
         );

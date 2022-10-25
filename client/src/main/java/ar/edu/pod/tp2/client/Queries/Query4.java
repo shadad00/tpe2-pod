@@ -5,6 +5,7 @@ import ar.edu.pod.tp2.Mappers.Query4Mapper_MonthValue;
 import ar.edu.pod.tp2.MonthLocal;
 import ar.edu.pod.tp2.Pair;
 import ar.edu.pod.tp2.Reducer.Query4Reducer_MonthValue;
+import ar.edu.pod.tp2.client.CustomLog;
 import com.hazelcast.mapreduce.JobCompletableFuture;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,10 +30,17 @@ public class Query4 extends Query{
 
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName);
+        initializeContext(this.readingsListName,this.sensorMapName,  "time4.txt");
         if(this.year == null || this.maxNumber == null)
             throw new IllegalArgumentException("N or year argument is missing");
-
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query4.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "Map-reduce starting...",
+                true
+        );
         this.logger.info("Map-reduce starting...");
         JobCompletableFuture<Collection<Pair<Pair<String, Month>, Double>>> future = job
                 .mapper(new Query4Mapper_MonthValue(this.year))

@@ -4,6 +4,7 @@ import ar.edu.pod.tp2.Collators.Query3Collator;
 import ar.edu.pod.tp2.Mappers.Query3Mapper;
 import ar.edu.pod.tp2.Pair;
 import ar.edu.pod.tp2.Reducer.Query3Reducer;
+import ar.edu.pod.tp2.client.CustomLog;
 import com.hazelcast.mapreduce.JobCompletableFuture;
 
 import java.io.FileWriter;
@@ -28,10 +29,18 @@ public class Query3 extends Query {
 
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName);
+        initializeContext(this.readingsListName,this.sensorMapName, "time3.txt");
         if(this.minPedestrianNumber == null)
             throw new IllegalArgumentException("Invalid usage: Min number of pedestrian required");
         this.logger.info("Map-reduce starting...");
+        CustomLog.GetInstance().writeTimestamp(
+                Thread.currentThread().getStackTrace()[1].getMethodName(),
+                Query3.class.getName(),
+                Thread.currentThread().getStackTrace()[1].getLineNumber(),
+                timeLogPath,
+                "Map-reduce starting...",
+                true
+        );
         JobCompletableFuture<Collection<Pair<String, Pair<Integer, LocalDateTime>>>> future = job
                 .mapper(new Query3Mapper(this.minPedestrianNumber))
                 .reducer( new Query3Reducer() )
