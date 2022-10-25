@@ -60,17 +60,7 @@ public abstract class Query {
         addresses.addAll(Arrays.asList(addressesArgument.split(";")));
         this.inPath = Optional.ofNullable(properties.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
         this.outPath = Optional.ofNullable(properties.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
-        if(properties.containsKey("year"))
-            this.year = Integer.valueOf(System.getProperty("year",null));
-        if(properties.containsKey("n"))
-            this.maxNumber = Integer.valueOf(System.getProperty("n",null));
-        if(properties.containsKey("min"))
-            this.minPedestrianNumber = Integer.valueOf(System.getProperty("min",null));
-        if(properties.containsKey("ram")){
-            this.sensorsInRam= true;
-            this.logger.info("Storing SensorMap in ram");
-        }else this.logger.info("Storing SensorMap in cluster");
-
+        this.sensorsInRam = properties.containsKey("ram");
     }
     public void configHazelcast(){
         final ClientConfig config = new ClientConfig();
@@ -108,18 +98,20 @@ public abstract class Query {
     protected void initializeContext(String readingsListName, String sensorMapName, String timeLogPath){
         try{
             this.logger.info("Reading arguments from system\n");
-            readArguments();
+            this.readArguments();
             this.timeLogPath = outPath + timeLogPath;
         }catch (IllegalArgumentException e ){
             this.logger.error("Invalid argument");
+            throw new IllegalArgumentException("Invalid arguments");
         }
             this.logger.info("Connecting to Hazelcast cluster \n");
             configHazelcast();
         try {
-            this.logger.info("Loading data to Hazelcast cluster \n");
+            this.logger.info("Reading from csv files \n");
             loadData(readingsListName,sensorMapName);
         }catch (IOException e){
             this.logger.error("Unable to open csv files");
+            throw new RuntimeException("Unable to open csv files");
         }
         this.readingIList = this.hazelcastInstance.getList(readingsListName);
         this.sensorIMap = this.hazelcastInstance.getMap(sensorMapName);

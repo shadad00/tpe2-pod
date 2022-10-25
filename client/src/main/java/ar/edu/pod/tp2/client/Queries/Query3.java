@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class Query3 extends Query {
@@ -27,11 +28,14 @@ public class Query3 extends Query {
                 "Sensor;Max_Reading_Count;Max_Reading_DateTime\n","query3JobTracker");
     }
 
+    @Override
+    public void readArguments() {
+        super.readArguments();
+        this.minPedestrianNumber = Integer.valueOf(Optional.ofNullable(System.getProperty("min")).orElseThrow(IllegalArgumentException::new));
+    }
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName, "/time3.txt");
-        if(this.minPedestrianNumber == null)
-            throw new IllegalArgumentException("Invalid usage: Min number of pedestrian required");
+        initializeContext(this.readingsListName,this.sensorMapName, "time3.txt");
         this.logger.info("Map-reduce starting...");
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),

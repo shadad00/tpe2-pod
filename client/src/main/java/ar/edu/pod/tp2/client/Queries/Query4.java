@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Month;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 public class Query4 extends Query{
@@ -31,8 +32,6 @@ public class Query4 extends Query{
 
     public void run(){
         initializeContext(this.readingsListName,this.sensorMapName,  "/time4.txt");
-        if(this.year == null || this.maxNumber == null)
-            throw new IllegalArgumentException("N or year argument is missing");
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
                 Query4.class.getName(),
@@ -56,6 +55,13 @@ public class Query4 extends Query{
             this.logger.error("Unable to fetch map-reduce results \n");
         }
 
+    }
+
+    @Override
+    public void readArguments() {
+        super.readArguments();
+        this.maxNumber = Integer.valueOf(Optional.ofNullable(System.getProperty("n")).orElseThrow(IllegalArgumentException::new));
+        this.year = Integer.valueOf(Optional.ofNullable(System.getProperty("year")).orElseThrow(IllegalArgumentException::new));
     }
 
 
