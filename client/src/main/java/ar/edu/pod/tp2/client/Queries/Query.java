@@ -61,6 +61,11 @@ public abstract class Query {
         this.inPath = Optional.ofNullable(properties.getProperty("inPath")).orElseThrow(IllegalArgumentException::new);
         this.outPath = Optional.ofNullable(properties.getProperty("outPath")).orElseThrow(IllegalArgumentException::new);
         this.sensorsInRam = properties.containsKey("ram");
+        if (sensorsInRam){
+            this.logger.info("Storing SensorMap in ram");
+        }else{
+            this.logger.info("Storing SensorMap in cluster");
+        }
     }
     public void configHazelcast(){
         final ClientConfig config = new ClientConfig();

@@ -2,12 +2,18 @@ cd client/target/
 tar -xvf tpe2-g14-client-1.0-SNAPSHOT-bin.tar.gz
 cd tpe2-g14-client-1.0-SNAPSHOT/
 chmod u+x *
-while getopts i:a:o: flag
+while getopts i:a:o:r: flag
 do
     case "${flag}" in
         i) inPath=${OPTARG};;
         a) addresses=${OPTARG};;
         o) outPath=${OPTARG};;
+        r) ram=${OPTARG};;
     esac
 done
-./query1.sh -DinPath="$inPath" -Daddresses="$addresses" -DoutPath="$outPath" -Dram
+if $ram -eq true
+then
+  ./query1.sh -DinPath=$inPath -Daddresses=$addresses -DoutPath=$outPath -Dram=true
+else
+  ./query1.sh -DinPath=$inPath -Daddresses=$addresses -DoutPath=$outPath
+fi

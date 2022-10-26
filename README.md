@@ -9,11 +9,15 @@ mvn clean install
 
 ## Ejecución 🚀
 ###Server
-Para correr el server utilizando un script:
+El servidor puede ejecutarse de dos maneras distintas
+**(Ubicado en la raíz del proyecto en el comienzo para ambos casos)**:
+1. Utilizando un Shell Script:
 ```
 ./scripts/server.sh
 ```
-O también se podría mediante los siguientes comandos por terminal
+2. Mediante comandos por terminal:
+
+
 ```
 cd server/target/
 tar -xvf tpe2-g14-server-1.0-SNAPSHOT-bin.tar.gz
@@ -21,60 +25,72 @@ cd tpe2-g14-server-1.0-SNAPSHOT/
 chmod u+x *
 ./run-server.sh
 ```
-###Queries
-Las queries pueden ejecutarse mediante un script o también mediante determinados comandos por terminal.
+### Queries
+Las queries pueden ejecutarse mediante:
+1. **Shell Script** 
+2. **Comandos por terminal**
 
-Todas las queries necesitan de la ejecución de los siguientes comandos si se decide no utilizar los scripts. 👀
+    Todas las queries necesitan de la ejecución de los siguientes comandos si se decide no utilizar los scripts. 👀
+**(Ubicado en la raíz del proyecto en el comienzo)**
+    ```
+    cd client/target/
+    tar -xvf tpe2-g14-client-1.0-SNAPSHOT-bin.tar.gz
+    cd tpe2-g14-client-1.0-SNAPSHOT/
+    chmod u+x *
+    ```
+
+> También está la opción de cargar los sensores en ram en vez de en el cluster. Si se quiere usar esa opción se debe incluir el flag: 
+1. Con Shell Script: "*-r true*".
+2. Comandos por terminal: "*-Dram=true*".
+
+#### Query 1
+1. Utilizando el script: **(Ubicado en la raíz del proyecto)**
 ```
-cd client/target/
-tar -xvf tpe2-g14-client-1.0-SNAPSHOT-bin.tar.gz
-cd tpe2-g14-client-1.0-SNAPSHOT/
-chmod u+x *
+./scripts/query1.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> [-r true]
 ```
-####Query 1
-Ejecución de query 1 utilizando el script:
+2. Mediante comandos por terminal: **(Recordar ejecutar los comandos mencionados previamente 👀)**
 ```
-./scripts/query1.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath>
+./query1.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> [-Dram=true]
 ```
-Ejecución de query 1 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
+#### Query 2
+1. Utilizando el script: **(Ubicado en la raíz del proyecto)**
 ```
-./query1.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath>
+./scripts/query2.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> [-r true]
 ```
-####Query 2
-Ejecución de query 2 utilizando el script:
+2. Mediante comandos por terminal: **(Recordar ejecutar los comandos mencionados previamente 👀)**
 ```
-./scripts/query2.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath>
+./query2.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> [-Dram=true]
 ```
-Ejecución de query 2 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
+#### Query 3
+> El parámetro *-m* o *-Dmin* hace referencia a la cantidad de peatones mínima que debe haber medido un sensor para figurar.
+1. Utilizando el script: **(Ubicado en la raíz del proyecto)**
 ```
-./query2.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath>
+./scripts/query3.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> -m <min> [-r true]
 ```
-####Query 3
-Ejecución de query 3 utilizando el script:
+2. Mediante comandos por terminal: **(Recordar ejecutar los comandos mencionados previamente 👀)**
 ```
-./scripts/query3.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> -m <min>
+./query3.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> -Dmin=<min> [-Dram=true]
 ```
-Ejecución de query 3 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
+#### Query 4
+> El parámetro *-n* o *-Dn* hace referencia al límite de sensores con mayor promedio mensual de peatones a mostrar.
+
+> El parámetro *-y* o *-Dyear* hace referencia al año en cuestión para realizar el promedio mensual.
+1. Utilizando el script: **(Ubicado en la raíz del proyecto)**
 ```
-./query3.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> -Dmin=<min>
+./scripts/query4.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> -n <n> -y <year> [-r true]
 ```
-####Query 4
-Ejecución de query 4 utilizando el script:
+2. Mediante comandos por terminal: **(Recordar ejecutar los comandos mencionados previamente 👀)**
 ```
-./scripts/query4.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> -n <n> -y <year>
+./query4.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> -Dyear=<year> -Dn=<n> [-Dram=true]
 ```
-Ejecución de query 4 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
+#### Query 5
+1. Utilizando el script: **(Ubicado en la raíz del proyecto)**
 ```
-./query4.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> -Dyear=<year> -Dn=<n>
+./scripts/query5.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath> [-r true]
 ```
-####Query 5
-Ejecución de query 5 utilizando el script:
+2. Mediante comandos por terminal: **(Recordar ejecutar los comandos mencionados previamente 👀)**
 ```
-./scripts/query5.sh -a 'xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -i <inPath> -o <outPath>
-```
-Ejecución de query 5 sin utilizar el script (recordar ejecutar los comandos mencionados previamente 👀):
-```
-./query5.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath>
+./query5.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> [-Dram=true]
 ```
 
 
