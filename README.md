@@ -8,7 +8,7 @@ mvn clean install
 ```
 
 ## Ejecución 🚀
-###Server
+### Server
 El servidor puede ejecutarse de dos maneras distintas
 **(Ubicado en la raíz del proyecto en el comienzo para ambos casos)**:
 1. Utilizando un Shell Script:
