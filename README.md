@@ -93,6 +93,17 @@ Las queries pueden ejecutarse mediante:
 ./query5.sh -DinPath=<inPath> -Daddresses='xx.xx.xx.xx:XXXX;yy.yy.yy.yy:YYYY' -DoutPath=<outPath> [-Dram=true]
 ```
 
+### Instrucciones para el seteo de red del Server
+
+Para configurar el server, 
+1. Hay que cambiar la IP de la línea 27 de la clase Server, ubicada en el módulo server. 
+2. Luego, correr
+```
+mvn clean && mvn install
+```
+3. Ejecutar el server según las instrucciones previas
+
+Para 
 
 ## Autores 💭
 * **Gaspar Budó Berra**
