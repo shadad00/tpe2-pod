@@ -5,6 +5,7 @@ public enum MonthLocal {
     FEBRUARY("February"),
     MARCH("March"),
     APRIL("April"),
+    MAY("May"),
     JUNE("June"),
     JULY("July"),
     AUGUST("August"),

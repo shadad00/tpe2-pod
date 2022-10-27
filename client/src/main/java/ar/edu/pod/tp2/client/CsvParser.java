@@ -43,7 +43,7 @@ abstract class CsvParser {
         String[] aux;
         Integer n= 0;
         for(String line : lines){
-            if (n % 100000 == 0)
+            if (n % 1000 == 0)
                 logger.info(n.toString());
             aux = line.trim().split(";");
             loadData(aux);

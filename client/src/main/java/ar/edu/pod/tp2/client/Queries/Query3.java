@@ -35,7 +35,7 @@ public class Query3 extends Query {
     }
 
     public void run(){
-        initializeContext(this.readingsListName,this.sensorMapName, "time3.txt");
+        initializeContext(this.readingsListName,this.sensorMapName, "/time3.txt");
         this.logger.info("Map-reduce starting...");
         CustomLog.GetInstance().writeTimestamp(
                 Thread.currentThread().getStackTrace()[1].getMethodName(),
