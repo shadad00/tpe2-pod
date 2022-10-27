@@ -30,7 +30,7 @@ Las queries pueden ejecutarse mediante:
 1. **Shell Script** 
 2. **Comandos por terminal**
 
-    Todas las queries necesitan de la ejecución de los siguientes comandos si se decide no utilizar los scripts. 👀
+    Todas las queries necesitan de la ejecución de los siguientes comandos si se decide no utilizar los scripts. Si se ejecuta una vez, no es necesario ejecutarlo para correr las demás queries. 👀
 **(Ubicado en la raíz del proyecto en el comienzo)**
     ```
     cd client/target/
