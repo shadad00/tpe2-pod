@@ -95,15 +95,13 @@ Las queries pueden ejecutarse mediante:
 
 ### Instrucciones para el seteo de red del Server
 
-Para configurar el server, 
+Para configurar el server: 
 1. Hay que cambiar la IP de la línea 27 de la clase Server, ubicada en el módulo server. 
-2. Luego, correr
+2. Luego, correr:
 ```
-mvn clean && mvn install
+mvn clean install
 ```
-3. Ejecutar el server según las instrucciones previas
-
-Para 
+3. Ejecutar el server según las instrucciones previas 
 
 ## Autores 💭
 * **Gaspar Budó Berra**
